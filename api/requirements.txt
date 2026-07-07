@@ -14,6 +14,6 @@ trimesh>=4.3
 scikit-image>=0.22
 fast-simplification>=0.1.7
 
-# Install engine as editable package from parent directory
-# This works because Vercel includes the entire project in /vercel/path0
--e ../engine
+# Install engine as editable package using absolute path for Vercel
+# Vercel deploys the entire project to /vercel/path0
+-e /vercel/path0/engine
