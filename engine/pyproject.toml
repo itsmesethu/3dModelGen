@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "reconstruction-engine"
+version = "0.1.0"
+description = "Platform-independent 3D reconstruction engine (photos -> GLB). No HTTP, no Android, no UI - only processing."
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.26",
+    "opencv-python-headless>=4.9",
+    "Pillow>=10.2",
+    "trimesh>=4.3",
+    "scikit-image>=0.22",
+    "fast-simplification>=0.1.7",
+]
+
+[project.optional-dependencies]
+# Quality upgrades - the plugin registry picks them up automatically.
+ai = ["torch>=2.2", "rembg>=2.0"]
+meshing = ["open3d>=0.18"]
+
+[tool.setuptools.packages.find]
+include = ["engine*"]

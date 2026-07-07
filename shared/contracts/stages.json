@@ -1,0 +1,14 @@
+{
+  "$comment": "Canonical pipeline stages. Source of truth: engine/engine/models/types.py. Mirrored by: mobile/src/services/reconstruction/stages.ts and android/bridge Kotlin constants.",
+  "stages": [
+    { "key": "preparing", "label": "Preparing" },
+    { "key": "validating", "label": "Validating Images" },
+    { "key": "background_removal", "label": "Removing Backgrounds" },
+    { "key": "camera_estimation", "label": "Estimating Camera Positions" },
+    { "key": "reconstruction", "label": "Reconstructing Geometry" },
+    { "key": "mesh_repair", "label": "Repairing Mesh" },
+    { "key": "texturing", "label": "Applying Texture" },
+    { "key": "optimization", "label": "Optimizing Model" },
+    { "key": "export", "label": "Exporting Model" }
+  ]
+}

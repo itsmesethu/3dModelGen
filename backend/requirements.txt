@@ -1,0 +1,11 @@
+# Thin development wrapper — all processing deps come from the engine.
+fastapi>=0.110
+uvicorn[standard]>=0.29
+python-multipart>=0.0.9
+
+# The reconstruction engine (single home of all business logic)
+-e ../engine
+
+# Optional quality upgrades (picked up automatically by the engine registry):
+#   pip install -e "../engine[ai]"        -> torch, rembg
+#   pip install -e "../engine[meshing]"   -> open3d
