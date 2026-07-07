@@ -18,7 +18,6 @@ export default function App() {
 
   return (
     <div className="bg-slate-900 min-h-screen">
-      
       {currentScreen === 'home' && <Home onNavigate={handleNavigate} />}
       {currentScreen === 'create' && <Create onNavigate={handleNavigate} />}
       {currentScreen === 'camera' && <CameraCapture onNavigate={handleNavigate} />}
