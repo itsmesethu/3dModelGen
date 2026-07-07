@@ -1,0 +1,16 @@
+Metadata-Version: 2.4
+Name: reconstruction-engine
+Version: 0.1.0
+Summary: Platform-independent 3D reconstruction engine (photos -> GLB). No HTTP, no Android, no UI - only processing.
+Requires-Python: >=3.10
+Requires-Dist: numpy>=1.26
+Requires-Dist: opencv-python-headless>=4.9
+Requires-Dist: Pillow>=10.2
+Requires-Dist: trimesh>=4.3
+Requires-Dist: scikit-image>=0.22
+Requires-Dist: fast-simplification>=0.1.7
+Provides-Extra: ai
+Requires-Dist: torch>=2.2; extra == "ai"
+Requires-Dist: rembg>=2.0; extra == "ai"
+Provides-Extra: meshing
+Requires-Dist: open3d>=0.18; extra == "meshing"

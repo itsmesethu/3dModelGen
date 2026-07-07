@@ -1,0 +1,13 @@
+numpy>=1.26
+opencv-python-headless>=4.9
+Pillow>=10.2
+trimesh>=4.3
+scikit-image>=0.22
+fast-simplification>=0.1.7
+
+[ai]
+torch>=2.2
+rembg>=2.0
+
+[meshing]
+open3d>=0.18

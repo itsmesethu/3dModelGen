@@ -1,13 +1,16 @@
 import axios from 'axios';
 
-import { BACKEND_URL } from '../../config';
+import { getBackendUrl } from '../../config';
 import type { CapturedImage } from '../../store/useCreateStore';
 import type { ImageValidation, JobCreated, JobStatus } from './types';
 
-const client = axios.create({
-  baseURL: `${BACKEND_URL}/api`,
-  timeout: 120000,
-});
+// Create client with dynamic baseURL
+const getClient = () => {
+  return axios.create({
+    baseURL: `${getBackendUrl()}/api`,
+    timeout: 120000,
+  });
+};
 
 function toFormFile(image: CapturedImage) {
   const name = image.fileName || 'photo.jpg';
@@ -22,6 +25,7 @@ function toFormFile(image: CapturedImage) {
 
 /** Upload all images and start a reconstruction job. */
 export async function createJob(images: CapturedImage[]): Promise<JobCreated> {
+  const client = getClient();
   const form = new FormData();
   images.forEach(image => form.append('images', toFormFile(image)));
   const response = await client.post<JobCreated>('/jobs', form, {
@@ -31,16 +35,18 @@ export async function createJob(images: CapturedImage[]): Promise<JobCreated> {
 }
 
 export async function getJobStatus(jobId: string): Promise<JobStatus> {
+  const client = getClient();
   const response = await client.get<JobStatus>(`/jobs/${jobId}`);
   return response.data;
 }
 
 export function getModelUrl(jobId: string): string {
-  return `${BACKEND_URL}/api/jobs/${jobId}/model`;
+  return `${getBackendUrl()}/api/jobs/${jobId}/model`;
 }
 
 /** Delete the job and its temporary files on the backend. */
 export async function deleteJob(jobId: string): Promise<void> {
+  const client = getClient();
   try {
     await client.delete(`/jobs/${jobId}`);
   } catch {
@@ -52,6 +58,7 @@ export async function deleteJob(jobId: string): Promise<void> {
 export async function validateImage(
   image: CapturedImage,
 ): Promise<ImageValidation | null> {
+  const client = getClient();
   try {
     const form = new FormData();
     form.append('image', toFormFile(image));
@@ -67,6 +74,7 @@ export async function validateImage(
 }
 
 export async function isBackendReachable(): Promise<boolean> {
+  const client = getClient();
   try {
     await client.get('/health', { timeout: 5000 });
     return true;

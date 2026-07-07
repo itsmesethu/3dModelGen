@@ -2,6 +2,7 @@ import React from 'react';
 import { NavigationContainer, DarkTheme } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import BackendConfigScreen from '../screens/BackendConfig/BackendConfigScreen';
 import CameraScreen from '../screens/Camera/CameraScreen';
 import Create3DScreen from '../screens/Create3D/Create3DScreen';
 import HomeScreen from '../screens/Home/HomeScreen';
@@ -36,6 +37,7 @@ export default function RootNavigator() {
           contentStyle: { backgroundColor: colors.background },
         }}>
         <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="BackendConfig" component={BackendConfigScreen} options={{ title: 'Backend Configuration' }} />
         <Stack.Screen name="Visualize" component={VisualizeScreen} options={{ title: 'Visualize 3D' }} />
         <Stack.Screen name="Create3D" component={Create3DScreen} options={{ title: 'Create 3D' }} />
         <Stack.Screen name="Camera" component={CameraScreen} options={{ headerShown: false }} />
