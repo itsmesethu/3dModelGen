@@ -3,7 +3,17 @@ fastapi>=0.110
 uvicorn[standard]>=0.29
 python-multipart>=0.0.9
 
-# The reconstruction engine (single home of all business logic)
+# The reconstruction engine dependencies (from engine/pyproject.toml)
+numpy>=1.26
+opencv-python-headless>=4.9
+Pillow>=10.2
+trimesh>=4.3
+scikit-image>=0.22
+fast-simplification>=0.1.7
+
+# The reconstruction engine itself
+# For local development: -e ../engine
+# For Vercel: will be installed from ../engine via build process
 -e ../engine
 
 # Optional quality upgrades (picked up automatically by the engine registry):

@@ -10,8 +10,14 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-# Add parent directory to path for imports
-sys.path.insert(0, str(Path(__file__).parent))
+# Add paths for imports
+api_dir = Path(__file__).parent
+project_root = api_dir.parent
+
+# Add api directory for local app imports
+sys.path.insert(0, str(api_dir))
+# Add project root for engine imports
+sys.path.insert(0, str(project_root))
 
 from app.api.routes import router as api_router
 from app.config import settings
