@@ -1,9 +1,12 @@
-# Thin development wrapper — all processing deps come from the engine.
+# API and Engine dependencies for Vercel deployment
+# All dependencies are listed explicitly to avoid path resolution issues
+
+# FastAPI and server
 fastapi>=0.110
 uvicorn[standard]>=0.29
 python-multipart>=0.0.9
 
-# The reconstruction engine dependencies (from engine/pyproject.toml)
+# Image processing and 3D reconstruction
 numpy>=1.26
 opencv-python-headless>=4.9
 Pillow>=10.2
@@ -11,11 +14,6 @@ trimesh>=4.3
 scikit-image>=0.22
 fast-simplification>=0.1.7
 
-# The reconstruction engine itself
-# For local development: -e ../engine
-# For Vercel: will be installed from ../engine via build process
+# Install engine as editable package from parent directory
+# This works because Vercel includes the entire project in /vercel/path0
 -e ../engine
-
-# Optional quality upgrades (picked up automatically by the engine registry):
-#   pip install -e "../engine[ai]"        -> torch, rembg
-#   pip install -e "../engine[meshing]"   -> open3d
