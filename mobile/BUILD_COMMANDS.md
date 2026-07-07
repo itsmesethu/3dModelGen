@@ -10,6 +10,7 @@ The following optimizations have been configured in `android/gradle.properties`:
 - **Configure on Demand**: Only configure projects that are needed
 - **Gradle Daemon**: Keeps Gradle running in background for faster subsequent builds
 - **Architecture**: Limited to `arm64-v8a` only (most modern devices)
+- **Windows Long Paths**: Enabled to fix C++ build path length issues (260 char limit)
 
 ## Clean Commands
 
