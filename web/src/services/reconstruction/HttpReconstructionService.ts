@@ -8,7 +8,7 @@ import type { GeneratedModel, ProgressListener, ReconstructionService } from './
  * Polls the backend for job status and reports progress via callback.
  */
 export class HttpReconstructionService implements ReconstructionService {
-  private pollIntervalMs = 1500;
+  private pollIntervalMs = 500;
 
   async validateImage(imageUri: string): Promise<{ valid: boolean; issues: string[] }> {
     const imageBase64 = await this.uriToBase64(imageUri);
@@ -40,11 +40,11 @@ export class HttpReconstructionService implements ReconstructionService {
           const status = await getJobStatus(jobId);
 
           // Report progress (convert progress from 0-1 to 0-100)
-          // Use stage from API response, or empty string if not available
           const stageKey = status.stage || 'validate';
           const percent = Math.round(status.progress * 100);
           
-          console.log(`Job progress: ${percent}% - Stage: ${stageKey}`);
+          // Always call onProgress to ensure UI updates
+          console.log(`Job progress: ${percent}% - Stage: ${stageKey} - State: ${status.state}`);
           onProgress(percent, stageKey);
 
           // Check if done
@@ -52,6 +52,7 @@ export class HttpReconstructionService implements ReconstructionService {
             clearInterval(pollInterval);
             console.log('Job completed, fetching model...');
             const model = await getModel(jobId);
+            console.log('Model fetched successfully');
             resolve({
               glbData: model.glbData,
               metadata: model.metadata,
@@ -61,6 +62,7 @@ export class HttpReconstructionService implements ReconstructionService {
             });
           } else if (status.state === 'failed') {
             clearInterval(pollInterval);
+            console.error('Job failed:', status.error);
             reject(new Error(status.error || 'Job failed'));
           }
         } catch (error) {

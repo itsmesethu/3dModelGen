@@ -1,10 +1,14 @@
 import axios from 'axios';
 import { getBackendUrl } from '../../config';
 
-const client = axios.create({
+// Create axios client with dynamic baseURL
+let client = axios.create({
   baseURL: getBackendUrl(),
   timeout: 30000,
 });
+
+// Log configuration for debugging
+console.log('API Client initialized with baseURL:', getBackendUrl());
 
 /**
  * Helper function to convert base64 string to Blob
@@ -62,51 +66,80 @@ export interface ModelResponse {
  * Validate a single image.
  */
 export async function validateImage(imageBase64: string): Promise<ValidationResponse> {
-  const blob = base64ToBlob(imageBase64);
-  const formData = new FormData();
-  formData.append('image', blob, 'capture.jpg');
+  try {
+    const blob = base64ToBlob(imageBase64);
+    const formData = new FormData();
+    formData.append('image', blob, 'capture.jpg');
 
-  const response = await client.post<ValidationResponse>('/api/validate', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-  return response.data;
+    console.log('Validating image via POST /api/validate');
+    const response = await client.post<ValidationResponse>('/api/validate', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    console.log('Image validation response:', response.data);
+    return response.data;
+  } catch (error: any) {
+    console.error('Image validation failed:', error.response?.data || error.message);
+    throw error;
+  }
 }
 
 /**
  * Start a reconstruction job.
  */
 export async function startJob(imagesBase64: string[]): Promise<string> {
-  const formData = new FormData();
-  
-  imagesBase64.forEach((base64, index) => {
-    const blob = base64ToBlob(base64);
-    formData.append('images', blob, `image_${index + 1}.jpg`);
-  });
+  try {
+    const formData = new FormData();
+    
+    imagesBase64.forEach((base64, index) => {
+      const blob = base64ToBlob(base64);
+      formData.append('images', blob, `image_${index + 1}.jpg`);
+    });
 
-  const response = await client.post<{ job_id: string }>('/api/jobs', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-  return response.data.job_id;
+    console.log(`Starting job with ${imagesBase64.length} images via POST /api/jobs`);
+    const response = await client.post<{ job_id: string }>('/api/jobs', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    console.log('Job created with ID:', response.data.job_id);
+    return response.data.job_id;
+  } catch (error: any) {
+    console.error('Job creation failed:', error.response?.data || error.message);
+    throw error;
+  }
 }
 
 /**
  * Get job status.
  */
 export async function getJobStatus(jobId: string): Promise<JobResponse> {
-  const response = await client.get<JobResponse>(`/api/jobs/${jobId}`);
-  return response.data;
+  try {
+    const url = `/api/jobs/${jobId}`;
+    console.log(`Fetching job status via GET ${url}`);
+    const response = await client.get<JobResponse>(url);
+    return response.data;
+  } catch (error: any) {
+    console.error(`Failed to get job status for ${jobId}:`, error.response?.data || error.message);
+    throw error;
+  }
 }
 
 /**
  * Get the generated model.
  */
 export async function getModel(jobId: string): Promise<ModelResponse> {
-  const response = await client.get<ModelResponse>(`/api/jobs/${jobId}/model`);
-  return response.data;
+  try {
+    const url = `/api/jobs/${jobId}/model`;
+    console.log(`Fetching model via GET ${url}`);
+    const response = await client.get<ModelResponse>(url);
+    console.log('Model fetched successfully');
+    return response.data;
+  } catch (error: any) {
+    console.error(`Failed to get model for ${jobId}:`, error.response?.data || error.message);
+    throw error;
+  }
 }
 
 /**
