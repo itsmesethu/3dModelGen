@@ -3,7 +3,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "reconstruction-engine"
+name = "engine"
 version = "0.1.0"
 description = "Platform-independent 3D reconstruction engine (photos -> GLB). No HTTP, no Android, no UI - only processing."
 requires-python = ">=3.10"
