@@ -5,22 +5,27 @@
   "env": {
     "PYTHONPATH": "/vercel/path0:/vercel/path0/api"
   },
-  "functions": {
-    "api/index.py": {
-      "runtime": "@vercel/python@3.12",
-      "maxDuration": 60,
-      "memory": 2048,
-      "includeFiles": "engine/**"
-    }
-  },
-  "rewrites": [
+  "builds": [
     {
-      "source": "/api/(.*)",
-      "destination": "api/index.py"
+      "src": "web/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
     },
     {
-      "source": "/(.*)",
-      "destination": "web/$1"
+      "src": "api/index.py",
+      "use": "@vercel/python@3.12.0"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "api/index.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "web/$1"
     }
   ]
 }
